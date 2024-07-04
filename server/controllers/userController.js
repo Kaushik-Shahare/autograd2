@@ -10,15 +10,15 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-const getUserById = async (req, res) => {
-  try {
-    const user = await User.findById(id).select("-password");
-    res.status(200).json({ user });
-  } catch (error) {
-    console.log("Get user by id error: ", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
+// const getUserById = async (req, res) => {
+//   try {
+//     const user = await User.findById(id).select("-password");
+//     res.status(200).json({ user });
+//   } catch (error) {
+//     console.log("Get user by id error: ", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
 
 const createUser = async (req, res) => {
   const { username, email, password, fullName } = req.body;
@@ -64,7 +64,7 @@ const deleteUser = async (req, res) => {
 
 module.exports = {
   getAllUsers,
-  getUserById,
+  // getUserById,
   createUser,
   updateUser,
   deleteUser,

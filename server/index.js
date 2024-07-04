@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const authRouter = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
+const questionRoutes = require("./routes/questionRoutes");
 
 dotenv.config();
 
@@ -26,7 +27,8 @@ try {
 }
 
 app.use("/api/auth", authRouter);
-app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/users", userRoutes);
+app.use("/api/questions", questionRoutes);
 
 app.get("/", (req, res) => {
   res.send("Server is running");

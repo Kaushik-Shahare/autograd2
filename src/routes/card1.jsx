@@ -1,13 +1,28 @@
 import React, { useState, useEffect } from "react";
 import "../style/styles.css";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Link } from 'react-router-dom';
 
 
-const Home = () => {
+const Card = () => {
   const navigate = useNavigate();
   const [dropdownActive, setDropdownActive] = useState(false);
   const [username, setUsername] = useState("Free");
+  const [questions, setQuestions] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        // Using axios to replace 'fetch'
+        const response = await axios.get('http://localhost:3001/api/questions/getall');
+        setQuestions([response.data.questions]); // Update state with fetched questions
+      } catch (error) {
+        console.error('Failed to fetch questions:', error);
+      }
+    };
+    fetchQuestions();
+  }, []);
 
 
   useEffect(() => {
@@ -44,6 +59,35 @@ const Home = () => {
       window.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
+  const handleFormSubmit = async ({ question, output, stdin, cardid }) => {
+    const newQuestion = { question, output, stdin, cardid };
+
+    try {
+        // Send a POST request to the server using the updated route with full URL
+        const response = await fetch('http://localhost:3001/api/questions/creatques', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newQuestion),
+        });
+
+        // Check if the request was successful
+        if (response) {
+            const createdQuestion = await response.json();
+            // Update your state or UI here with the new question
+            // setQuestions(prevQuestions => [...prevQuestions, createdQuestion]);
+            setShowForm(false); // Hide form after successful submission
+        } else {
+            // Handle server errors or invalid responses
+            console.error('Failed to create question:', response.statusText);
+        }
+    } catch (error) {
+        // Handle network errors
+        console.error('Error submitting form:', error);
+    }
+};
 
   return (
     <>
@@ -132,91 +176,36 @@ const Home = () => {
           </div>
         </div>
       </nav>
-      <div className="container px-4 px-lg-5">
-        <div className="row gx-4 gx-lg-5 align-items-center my-5">
-          <div className="col-lg-7">
-            <img
-              className="img-fluid rounded mb-4 mb-lg-0"
-              src="https://www.educative.io/v2api/editorpage/6462443168989184/image/6429479353712640"
-              alt="..."
-            />
-          </div>
-          <div className="col-lg-5">
-            <h1 className="font-weight-light"></h1>
-            <p>
-            Programmers seem to be changing the world. It would be a relief, for them and for all of us, if they knew something about it. 
-            </p>
-            {/* <a className="btn btn-primary" href="#!">
-              Call to Action!
-            </a> */}
-          </div>
-        </div>
-        <div className="card text-white bg-secondary my-5 py-4 text-center">
-          <div className="card-body">
-            <p className="text-white m-0">Chapters</p>
-          </div>
-        </div>
-        <div className="row gx-4 gx-lg-5">
-          <div className="col-md-4 mb-5">
-            <div className="card h-100">
-              <div className="card-body">
-                <h2 className="card-title">Basics</h2>
-                <p className="card-text">
-                  You have decided to embark on learning how to program. That is
-                  wonderful! Hopefully, it is not by compulsion, for programming
-                  can be great!
-                </p>
-              </div>
-              <div className="card-footer">
-  <Link to="/card1" className="btn btn-primary btn-sm">
-    Begin
-  </Link>
-</div>
-            </div>
-          </div>
-          <div className="col-md-4 mb-5">
-            <div className="card h-100">
-              <div className="card-body">
-                <h2 className="card-title">Decision Making Statements</h2>
-                <p className="card-text">
-                Imagine you are traveling on a major highway in the direction of the arrow, as depicted in Figure 3.1, and you reach a fork on the road. You would then have to choose which road to take next.
-                </p>
-              </div>
-              <div className="card-footer">
-                <a className="btn btn-primary btn-sm" href="#!">
-                  Begin
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-4 mb-5">
-            <div className="card h-100">
-              <div className="card-body">
-                <h2 className="card-title">Recursion</h2>
-                <p className="card-text">
-                Recursion is an important tool in programming, and may be defined as a method of solving a computational problem where the solution depends on solutions to smaller instances of the same problem.
-                </p>
-              </div>
-              <div className="card-footer">
-                <a className="btn btn-primary btn-sm" href="#!">
-                  Begin
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <footer className="py-5 bg-dark">
-        <div className="container px-4 px-lg-5">
-          <p className="m-0 text-center text-white">
-            Copyright &copy; Your Website 2023
-          </p>
-        </div>
-      </footer>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-      <script src="js/scripts.js"></script>
-    </>
+      <div>
+      {/* Existing JSX */}
+      <button onClick={() => setShowForm(true)}>Add Question</button>
+      {showForm && (
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          handleFormSubmit({
+            question: e.target.question.value,
+            output: e.target.output.value,
+            stdin: e.target.stdin.value,
+            cardid: e.target.cardid.value,
+          });
+        }}>
+          <input type="text" name="question" placeholder="Question" />
+          <input type="text" name="output" placeholder="Output" />
+          <input type="text" name="stdin" placeholder="Stdin" />
+          <input type="text" name="cardid" placeholder="Card ID" />
+          <button type="submit">Submit</button>
+        </form>
+      )}
+      {/* Render questions or other components */}
+    </div>
+      <ul>
+      {questions.map((question) => (
+        <li key={question.id}>{question.text}</li> // Assuming each question has an 'id' and 'text'
+      ))}
+    </ul>
+      </>
+      
   );
 };
 
-export default Home;
+export default Card;

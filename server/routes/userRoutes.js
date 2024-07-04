@@ -9,7 +9,7 @@ const {
 } = require("../controllers/userController");
 
 userRouter.get("/", getAllUsers);
-userRouter.get("/:id", getUserById);
+// userRouter.get("/:id", getUserById);
 userRouter.post("/", createUser);
 userRouter.put("/:id", updateUser);
 userRouter.delete("/:id", deleteUser);
