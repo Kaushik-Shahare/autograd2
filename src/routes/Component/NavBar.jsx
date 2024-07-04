@@ -1,31 +1,17 @@
-import React, { useState, useEffect } from "react";
-import "../style/styles.css";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import "../../style/styles.css";
 import { useNavigate } from "react-router-dom";
 
-const Card = () => {
+const NavBar = () => {
   const navigate = useNavigate();
   const [dropdownActive, setDropdownActive] = useState(false);
   const [username, setUsername] = useState("Free");
-  const [questions, setQuestions] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-
-  useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      navigate("/signin");
-    } else {
-      const storedUsername = localStorage.getItem("username");
-      setUsername(storedUsername);
-    }
-  }, []);
-
+  const toggleDropdown = () => {
+    setDropdownActive(!dropdownActive);
+  };
   const logout = () => {
     localStorage.removeItem("token");
     navigate("/signin");
-  };
-
-  const toggleDropdown = () => {
-    setDropdownActive(!dropdownActive);
   };
 
   useEffect(() => {
@@ -44,40 +30,9 @@ const Card = () => {
     };
   }, []);
 
-  const handleFormSubmit = async ({ question, output, stdin, cardid }) => {
-    const newQuestion = { question, output, stdin, cardid };
-
-    try {
-      // Send a POST request to the server using the updated route with full URL
-      const response = await fetch(
-        "http://localhost:3001/api/questions/creatques",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newQuestion),
-        }
-      );
-
-      // Check if the request was successful
-      if (response) {
-        const createdQuestion = await response.json();
-        // Update your state or UI here with the new question
-        // setQuestions(prevQuestions => [...prevQuestions, createdQuestion]);
-        setShowForm(false); // Hide form after successful submission
-      } else {
-        // Handle server errors or invalid responses
-        console.error("Failed to create question:", response.statusText);
-      }
-    } catch (error) {
-      // Handle network errors
-      console.error("Error submitting form:", error);
-    }
-  };
-
   return (
-    <>
+    <div>
+      {" "}
       <div>
         <meta charSet="utf-8" />
         <meta
@@ -162,37 +117,8 @@ const Card = () => {
           </div>
         </div>
       </nav>
-      <div>
-        {/* Existing JSX */}
-        <button onClick={() => setShowForm(true)}>Add Question</button>
-        {showForm && (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleFormSubmit({
-                question: e.target.question.value,
-                output: e.target.output.value,
-                stdin: e.target.stdin.value,
-                cardid: e.target.cardid.value,
-              });
-            }}
-          >
-            <input type="text" name="question" placeholder="Question" />
-            <input type="text" name="output" placeholder="Output" />
-            <input type="text" name="stdin" placeholder="Stdin" />
-            <input type="text" name="cardid" placeholder="Card ID" />
-            <button type="submit">Submit</button>
-          </form>
-        )}
-        {/* Render questions or other components */}
-      </div>
-      <ul>
-        {questions.map((question) => (
-          <Card key={question._id} question={question} />
-        ))}
-      </ul>
-    </>
+    </div>
   );
 };
 
-export default Card;
+export default NavBar;
