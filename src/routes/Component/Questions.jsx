@@ -5,10 +5,9 @@ import AddQuestion from "./AddQuestion";
 import Question from "./Question";
 import Output from "../../components/Output";
 
-
 const Questions = () => {
   const [questions, setQuestions] = useState([]);
-  const [selectedData, setSelectedData] = useState({ output: '', stdin: '' });
+  const [selectedData, setSelectedData] = useState({ output: "", stdin: "" });
 
   useEffect(() => {
     try {
@@ -24,7 +23,8 @@ const Questions = () => {
 
   const handleSelectQuestion = (questionId) => {
     // Fetch question details including output from the database
-    axios.get(`http://localhost:3001/api/questions/id/${questionId}`)
+    axios
+      .get(`http://localhost:3001/api/questions/id/${questionId}`)
       .then((response) => {
         // Assuming the response contains the question details including output
         setSelectedData({
@@ -67,13 +67,12 @@ const Questions = () => {
         {questions.map((question) => (
           <div
             key={question._id}
-            className="flex-1 min-w-[200px] max-w-[250px] h-[300px]"
+            className="flex-1 min-w-[200px] max-w-[250px] h-[300px] "
           >
-            <Question question={question}   deleteQuestion={deleteQuestion}   />
+            <Question question={question} deleteQuestion={deleteQuestion} />
           </div>
         ))}
       </div>
-     
     </div>
   );
 };

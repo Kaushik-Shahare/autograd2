@@ -1,17 +1,17 @@
 import { useContext, useState } from "react";
 import { Box, Button, Text, useToast } from "@chakra-ui/react";
 import { executeCode } from "../api";
+import { useQuestionContext } from "../context/dataHandler";
 
-const Output = ({ editorRef, language/*, output: propOutput, stdin*/}) => {
+const Output = ({ editorRef, language /*, output: propOutput, stdin*/ }) => {
+  const { output, stdin } = useQuestionContext();
+
   const toast = useToast();
-  const [output, setOutput] = useState(null);
+  const [Output, setOutput] = useState(output || []);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  
-
   const runCode = async () => {
-
     const sourceCode = editorRef.current.getValue();
     if (!sourceCode) return;
     try {
@@ -56,7 +56,6 @@ const Output = ({ editorRef, language/*, output: propOutput, stdin*/}) => {
         borderColor={isError ? "red.500" : "#333"}
       >
         {output
-        
           ? output.map((line, i) => <Text key={i}>{line}</Text>)
           : 'Click "Run Code" to see the output here'}
       </Box>
