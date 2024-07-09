@@ -1,24 +1,22 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Box, Button, Text, useToast } from "@chakra-ui/react";
 import { executeCode } from "../api";
 
-const Output = ({ editorRef, language }) => {
+const Output = ({ editorRef, language/*, output: propOutput, stdin*/}) => {
   const toast = useToast();
   const [output, setOutput] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [input, setInput] = useState(""); // New state for user input
 
-  const checkForScanf = (editorRef) => {
-    return editorRef.includes('scanf');
-  };
+  
 
   const runCode = async () => {
+
     const sourceCode = editorRef.current.getValue();
     if (!sourceCode) return;
     try {
       setIsLoading(true);
-      const { run: result } = await executeCode(language, sourceCode, input);
+      const { run: result } = await executeCode(language, sourceCode, stdin);
       // const { run: result } = await executeCode(language, sourceCode);
       setOutput(result.output.split("\n"));
       result.stderr ? setIsError(true) : setIsError(false);

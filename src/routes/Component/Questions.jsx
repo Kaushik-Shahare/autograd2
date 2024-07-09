@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import NavBar from "./NavBar";
-import { defineCssVars } from "@chakra-ui/react";
 import AddQuestion from "./AddQuestion";
 import Question from "./Question";
+import Output from "../../components/Output";
+
 
 const Questions = () => {
   const [questions, setQuestions] = useState([]);
+  const [selectedData, setSelectedData] = useState({ output: '', stdin: '' });
 
   useEffect(() => {
     try {
@@ -19,6 +21,23 @@ const Questions = () => {
       console.error("Failed to fetch questions:", error);
     }
   }, []);
+
+  const handleSelectQuestion = (questionId) => {
+    // Fetch question details including output from the database
+    axios.get(`http://localhost:3001/api/questions/id/${questionId}`)
+      .then((response) => {
+        // Assuming the response contains the question details including output
+        setSelectedData({
+          ...selectedData,
+          output: response.data.output,
+          stdin: response.data.stdin,
+          // Include other data you might need
+        });
+      })
+      .catch((error) => {
+        console.error("Failed to fetch question details:", error);
+      });
+  };
 
   const updateQuestions = (newQuestion) => {
     setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
@@ -50,10 +69,11 @@ const Questions = () => {
             key={question._id}
             className="flex-1 min-w-[200px] max-w-[250px] h-[300px]"
           >
-            <Question question={question} deleteQuestion={deleteQuestion} />
+            <Question question={question}   deleteQuestion={deleteQuestion}   />
           </div>
         ))}
       </div>
+     
     </div>
   );
 };

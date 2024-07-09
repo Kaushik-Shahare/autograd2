@@ -4,13 +4,14 @@ import { Editor } from "@monaco-editor/react";
 import LanguageSelector from "./LanguageSelector";
 import { CODE_SNIPPETS } from "../constants";
 import Output from "./Output";
-/////import QuestionSelector from "./QuestionSelector";
+import NavBar from "../routes/Component/NavBar";
+
 
 const CodeEditor = () => {
   const editorRef = useRef();
   const [value, setValue] = useState("");
   const [language, setLanguage] = useState("c");
-  // const [question, setQuestion] = useState("Questions");
+
 
   const onMount = (editor) => {
     editorRef.current = editor;
@@ -20,10 +21,11 @@ const CodeEditor = () => {
   const onSelect = (language) => {
     setLanguage(language);
     setValue(CODE_SNIPPETS[language]);
-    // setQuestion(question)
   };
 
   return (
+    <>
+    <NavBar />
     <Box>
       <HStack spacing={4}>
         <Box w="50%">
@@ -48,6 +50,7 @@ const CodeEditor = () => {
         <Output editorRef={editorRef} language={language} />
       </HStack>
     </Box>
+    </>
   );
 };
 export default CodeEditor;

@@ -7,7 +7,7 @@ const questionController = require('../controllers/QuesController');
 Quesrouter.get('/getall', questionController.getAllQuestions);
 
 // GET a question by ID
-Quesrouter.get('/:id', questionController.getQuestionById);
+Quesrouter.get('/id', questionController.getQuestionById);
 
 // POST create a new question
 Quesrouter.post('/creatques', questionController.createQuestion);

@@ -14,7 +14,7 @@ export const executeCode = async (language, sourceCode) => {
         content: sourceCode,
       },
     ],
-    stdin: "3",
+    stdin: ["a", "3"],
   });
   return response.data;
 };

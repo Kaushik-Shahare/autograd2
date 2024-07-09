@@ -17,6 +17,7 @@ function App() {
           <Route path="/signin" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/card1" element={<Questions />} />
+          <Route path="/editor" element={<CodeEditor />} />
         </Routes>
       </BrowserRouter>
     </div>

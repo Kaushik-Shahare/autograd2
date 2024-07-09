@@ -60,7 +60,7 @@ const AddQuestion = ({ updateQuestions }) => {
           <input type="text" name="question" placeholder="Question" />
           <input type="text" name="output" placeholder="Output" />
           <input type="text" name="stdin" placeholder="Stdin" />
-          <input type="text" name="cardid" placeholder="Card ID" />
+          <input type="text" name="cardid" placeholder="Card ID  format: [1,2,3]" />
           <button
             type="submit"
             className="bg-blue-900 hover:bg-blue-500 rounded p-2"
