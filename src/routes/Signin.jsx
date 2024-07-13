@@ -37,6 +37,7 @@ const Signin = () => {
       )
       .then((response) => {
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("username", response.data.username);
         navigate("/home");
       })
       .catch((error) => {

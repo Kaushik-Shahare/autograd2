@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const NavBar = () => {
   const navigate = useNavigate();
   const [dropdownActive, setDropdownActive] = useState(false);
-  const [username, setUsername] = useState("Free");
+  const username = localStorage.getItem("username");
   const toggleDropdown = () => {
     setDropdownActive(!dropdownActive);
   };
@@ -88,7 +88,7 @@ const NavBar = () => {
                       <i className="fa-solid fa-circle"></i>
                     </div>
                     <span>
-                      {username}
+                      <a style={{ color: "white" }}>{username}</a>
                       <i className="fa-solid fa-angle-down"></i>
                     </span>
                   </div>

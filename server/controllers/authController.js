@@ -64,7 +64,12 @@ const signin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({ message: "User successfully signed in" });
+    res
+      .status(200)
+      .json({
+        message: "User successfully signed in",
+        username: user.username,
+      });
   } catch (error) {
     console.log("Signin error: ", error);
     res.status(500).json({ message: "Internal server error" });
