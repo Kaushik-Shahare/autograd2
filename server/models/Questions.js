@@ -17,11 +17,10 @@ const QuesSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    
   },
   { timestamps: true }
 );
 
 const Question = mongoose.model("Questions", QuesSchema);
 
-module.exports =Question;
+module.exports = Question;
