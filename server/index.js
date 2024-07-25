@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const authRouter = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const questionRoutes = require("./routes/questionRoutes");
+const gradeRoutes = require("./routes/gradeRoutes");
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ try {
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRoutes);
 app.use("/api/questions", questionRoutes);
+app.use("/api/grades", gradeRoutes);
 
 app.get("/", (req, res) => {
   res.send("Server is running");
