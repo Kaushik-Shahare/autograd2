@@ -12,7 +12,6 @@ const Profile = () => {
   const [email, setEmail] = useState("");
   const [showMessage, setShowMessage] = useState(false);
 
-
   const [change, setChange] = useState(false);
 
   const handleUsernameChange = (event) => {
@@ -54,23 +53,24 @@ const Profile = () => {
 
   // Fetch user data
   useEffect(() => {
-    
     try {
       axios
-        .get(
-          `http://localhost:3001/api/users/`,
-          {
-            headers: {
-              Authorization:
-                "Bearer " + localStorage.getItem("token").split('"')[1],
-            },
-          }
-        )
+        .get(`http://localhost:3001/api/users/`, {
+          headers: {
+            Authorization:
+              "Bearer " + localStorage.getItem("token").split('"')[1],
+          },
+        })
         .then((response) => {
-          let { username, fullName, email } = response.data;
-          setUsername(username);
-          setFullName(fullName);
-          setEmail(email);
+          console.log("response", response.data);
+          if (response.data.users && response.data.users.length > 0) {
+            const { username, fullName, email } = response.data.users[0];
+            setUsername(username);
+            setFullName(fullName);
+            setEmail(email);
+          } else {
+            console.error("No users found in response");
+          }
         });
     } catch (error) {
       console.error("Error fetching data: ", error);

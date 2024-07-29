@@ -13,22 +13,24 @@ const ProfileDetails = ({
 }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
-    const id = localStorage.getItem("userId").split('"')[1];
     try {
-      axios.put(
-        `http://localhost:3001/api/user${id}`,
-        {
-          username,
-          email,
-          fullName,
-        },
-        {
-          headers: {
-            Authorization:
-              "Bearer " + localStorage.getItem("token").split('"')[1],
+      axios
+        .put(
+          `http://localhost:3001/api/users/`,
+          {
+            username,
+            email,
+            fullName,
           },
-        }
-      );
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((response) => {
+          console.log("response", response);
+        });
       updateChange();
     } catch (error) {
       console.error("Error Updating data: ", error);

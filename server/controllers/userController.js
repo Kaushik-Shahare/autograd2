@@ -42,11 +42,17 @@ const createUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const id  = req.userId; 
-  const { username, email, password, fullName } = req.body;
+  const id = req.userId;
+  const { username, email, fullName } = req.body;
   try {
-    await User.findByIdAndUpdate(id, { username, email, password, fullName });
-    res.status(200).json({ message: "User successfully updated" });
+    // await User.findByIdAndUpdate(id, { username, email, fullName });
+    var user = await User.findById(id);
+    user.username = username || user.username;
+    user.email = email || user.email;
+    user.fullName = fullName || user.fullName;
+
+    await user.save();
+    res.status(200).json({ message: "User successfully updated", user });
   } catch (error) {
     console.log("Update user error: ", error);
     res.status(500).json({ message: "Internal server error" });
