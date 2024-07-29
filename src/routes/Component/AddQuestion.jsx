@@ -2,11 +2,11 @@ import React, { useState } from "react";
 
 const AddQuestion = ({ updateQuestions }) => {
   const [showForm, setShowForm] = useState(false);
+
   const handleFormSubmit = async ({ question, output, stdin, cardid }) => {
     const newQuestion = { question, output, stdin, cardid };
 
     try {
-      // Send a POST request to the server using the updated route with full URL
       const response = await fetch(
         "http://localhost:3001/api/questions/creatques",
         {
@@ -18,19 +18,31 @@ const AddQuestion = ({ updateQuestions }) => {
         }
       );
 
-      // Check if the request was successful
-      if (response) {
+      if (response.ok) {
         const createdQuestion = await response.json();
         updateQuestions(createdQuestion.question);
-        // Update your state or UI here with the new question
-        // setQuestions(prevQuestions => [...prevQuestions, createdQuestion]);
         setShowForm(false); // Hide form after successful submission
+
+        // Assuming a default grade to set for all users
+        const defaultGrade = 0; // Example default grade
+        const questionId = createdQuestion._id; // Extract the question ID from the response
+
+        // Call the grade creation route for all users
+        await fetch("http://localhost:3001/api/grades/createForAllUsers", {
+          method: "POST",
+          headers: {
+
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token").split('"')[1],
+          },
+          body: JSON.stringify({ grade: defaultGrade, questionId }),
+        });
+
+        // Handle success or failure of grade creation as needed
       } else {
-        // Handle server errors or invalid responses
         console.error("Failed to create question:", response.statusText);
       }
     } catch (error) {
-      // Handle network errors
       console.error("Error submitting form:", error);
     }
   };

@@ -1,8 +1,8 @@
 const express = require("express");
+const auth = require("../middlewares/auth");
 const userRouter = express.Router();
 const {
   getAllUsers,
-  getUserById,
   createUser,
   updateUser,
   deleteUser,
@@ -11,7 +11,7 @@ const {
 userRouter.get("/", getAllUsers);
 // userRouter.get("/:id", getUserById);
 userRouter.post("/", createUser);
-userRouter.put("/:id", updateUser);
-userRouter.delete("/:id", deleteUser);
+userRouter.put("/", auth,updateUser);
+userRouter.delete("/", auth,deleteUser);
 
 module.exports = userRouter;

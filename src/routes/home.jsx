@@ -113,7 +113,7 @@ const Home = () => {
                     }`}
                   >
                     <li className="profile-dropdown-list-item">
-                      <a href="#">
+                      <a href="/profile">
                         <i className="fa-regular fa-user"></i>
                         Edit Profile
                       </a>

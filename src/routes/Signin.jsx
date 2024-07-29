@@ -38,6 +38,7 @@ const Signin = () => {
       .then((response) => {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("username", response.data.username);
+        localStorage.setItem("userId", JSON.stringify(response.data._id));
         navigate("/home");
       })
       .catch((error) => {

@@ -72,10 +72,38 @@ const deleteGrade = async (req, res) => {
   }
 };
 
+const createGradeForAllUsers = async (req, res) => {
+  const { questionId, studentIds, grade } = req.body;
+  try {
+    // Ensure all required fields are provided
+    if (!questionId || !studentIds || studentIds.length === 0 || grade === undefined) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    // Create a grade for each studentId
+    const gradePromises = studentIds.map(studentId => {
+      const newGrade = new Grade({
+        questionId,
+        studentId,
+        grade,
+      });
+      return newGrade.save();
+    });
+
+    // Wait for all grades to be saved
+    await Promise.all(gradePromises);
+
+    res.status(201).json({ message: "Grades successfully created for all users" });
+  } catch (error) {
+    console.log("Create grade for all users error: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 module.exports = {
   getAllGrades,
   getGradeById,
   createGrade,
   updateGrade,
   deleteGrade,
+  createGradeForAllUsers
 };

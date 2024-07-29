@@ -7,6 +7,7 @@ import Home from "./routes/home";
 import Card1 from "./routes/card1";
 import Questions from "./routes/Component/Questions";
 import { QuestionProvider } from "./context/dataHandler";
+import Profile from "./routes/profile";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/card1" element={<Questions />} />
             <Route path="/editor" element={<CodeEditor />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </BrowserRouter>
       </div>
