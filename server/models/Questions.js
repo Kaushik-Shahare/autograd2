@@ -17,6 +17,12 @@ const QuesSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    grades: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Grade",
+      },
+    ],
   },
   { timestamps: true }
 );

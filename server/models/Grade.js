@@ -2,11 +2,6 @@ const mongoose = require("mongoose");
 
 // Define the schema
 const gradeSchema = new mongoose.Schema({
-  questionId: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "Questions", // Assuming this references a Question collection
-  },
   studentId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
