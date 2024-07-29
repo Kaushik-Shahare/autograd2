@@ -45,9 +45,9 @@ const createGrade = async (req, res) => {
       questionId,
     });
     if (existingGrade) {
-      return res
-        .status(400)
-        .json({ message: "Grade already exists", existingGrade });
+      existingGrade.grade = grade;
+      await existingGrade.save();
+      return res.status(200).json({ message: "Grade updated", existingGrade });
     }
 
     const newGrade = new Grade({
