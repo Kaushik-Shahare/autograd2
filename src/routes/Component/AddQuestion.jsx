@@ -23,22 +23,6 @@ const AddQuestion = ({ updateQuestions }) => {
         updateQuestions(createdQuestion.question);
         setShowForm(false); // Hide form after successful submission
 
-        // Assuming a default grade to set for all users
-        const defaultGrade = 0; // Example default grade
-        const questionId = createdQuestion._id; // Extract the question ID from the response
-
-        // Call the grade creation route for all users
-        await fetch("http://localhost:3001/api/grades/createForAllUsers", {
-          method: "POST",
-          headers: {
-
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token").split('"')[1],
-          },
-          body: JSON.stringify({ grade: defaultGrade, questionId }),
-        });
-
-        // Handle success or failure of grade creation as needed
       } else {
         console.error("Failed to create question:", response.statusText);
       }

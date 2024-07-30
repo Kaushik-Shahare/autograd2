@@ -2,16 +2,19 @@ import { useContext, useState } from "react";
 import { Box, Button, Text, useToast } from "@chakra-ui/react";
 import { executeCode } from "../api";
 import { useQuestionContext } from "../context/dataHandler";
+import axios from "axios";
 const Output = ({ editorRef, language /*, output: propOutput, stdin*/ }) => {
   let VerifyOutput;
-  const { output, stdin } = useQuestionContext();
+  const { output, stdin, questionId } = useQuestionContext();
   
   const [areOutputsEqual, setAreOutputsEqual] = useState(false);
   const toast = useToast();
   const [Output, setOutput] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [grade , setGrade] = useState(0);
   const runCode = async () => {
+    console.log("questionId", questionId);
     const sourceCode = editorRef.current.getValue();
     if (!sourceCode) return;
     try {
@@ -36,6 +39,23 @@ const Output = ({ editorRef, language /*, output: propOutput, stdin*/ }) => {
     if (JSON.stringify(VerifyOutput) === JSON.stringify(output)) {
       setAreOutputsEqual(true);
     }else{ setAreOutputsEqual(false);}
+    try {
+      const response = await axios.post('http://localhost:3001/api/grades/create', {
+        questionId,
+        grade,
+      }, {
+        headers: {
+          Authorization:
+           "Bearer " + localStorage.getItem("token").split('"')[1],
+        }
+      });
+    
+      if (response.data.message === "Grade successfully created") {
+        console.log("Grade successfully created");
+      }
+    } catch (error) {
+      console.error("Error making the request:", error.response ? error.response.data : error.message);
+    }
   };
 
   return (

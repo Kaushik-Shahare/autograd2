@@ -11,7 +11,7 @@ const Question = ({ question, deleteQuestion }) => {
     deleteQuestion(question._id);
   };
   const handleSubmit = () => {
-    updateAndNavigate(question.output, question.stdin);
+    updateAndNavigate(question.output, question.stdin, question._id);
     navigate("/editor");
   };
   return (

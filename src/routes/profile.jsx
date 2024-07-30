@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ProfileDetails from "./Component/profileDetails";
 import ProfilePicture from "./Component/profilePicture";
 import axios from "axios";
+import NavBar from "./Component/NavBar";
 
 const Profile = () => {
   const navigator = useNavigate();
@@ -79,6 +80,7 @@ const Profile = () => {
 
   return (
     <div className="flex flex-col sm:h-[450px] md:h-[550px] lg:h-[750px] lg:w-[60%] rounded-lg overflow-hidden bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0 ">
+      <NavBar />
       <ProfilePicture />
       <ProfileDetails
         username={username}
