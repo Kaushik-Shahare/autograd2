@@ -6,13 +6,13 @@ import axios from "axios";
 const Output = ({ editorRef, language /*, output: propOutput, stdin*/ }) => {
   let VerifyOutput;
   const { output, stdin, questionId } = useQuestionContext();
-  
+
   const [areOutputsEqual, setAreOutputsEqual] = useState(false);
   const toast = useToast();
   const [Output, setOutput] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [grade , setGrade] = useState(0);
+  const [grade, setGrade] = useState(0);
   const runCode = async () => {
     console.log("questionId", questionId);
     const sourceCode = editorRef.current.getValue();
@@ -22,8 +22,8 @@ const Output = ({ editorRef, language /*, output: propOutput, stdin*/ }) => {
       const { run: result } = await executeCode(language, sourceCode, stdin);
       // const { run: result } = await executeCode(language, sourceCode);
       setOutput(result.output.split("\n"));
-      VerifyOutput=result.output.split("\n");
-      console.log("VerifyOutput",VerifyOutput);
+      VerifyOutput = result.output.split("\n");
+      console.log("VerifyOutput", VerifyOutput);
       result.stderr ? setIsError(true) : setIsError(false);
     } catch (error) {
       console.log(error);
@@ -38,24 +38,25 @@ const Output = ({ editorRef, language /*, output: propOutput, stdin*/ }) => {
     }
     if (JSON.stringify(VerifyOutput) === JSON.stringify(output)) {
       setAreOutputsEqual(true);
-    }else{ setAreOutputsEqual(false);}
-    try {
-      const response = await axios.post('http://localhost:3001/api/grades/create', {
-        questionId,
-        grade,
-      }, {
-        headers: {
-          Authorization:
-           "Bearer " + localStorage.getItem("token").split('"')[1],
-        }
-      });
-    
-      if (response.data.message === "Grade successfully created") {
-        console.log("Grade successfully created");
-      }
-    } catch (error) {
-      console.error("Error making the request:", error.response ? error.response.data : error.message);
+    } else {
+      setAreOutputsEqual(false);
     }
+    axios
+      .post(
+        "http://localhost:3001/api/grades/create",
+        { questionId, grade },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -72,7 +73,7 @@ const Output = ({ editorRef, language /*, output: propOutput, stdin*/ }) => {
       >
         Run Code
       </Button>
-      
+
       <Box
         height="75vh"
         p={2}
@@ -82,14 +83,11 @@ const Output = ({ editorRef, language /*, output: propOutput, stdin*/ }) => {
         borderColor={isError ? "red.500" : "#333"}
       >
         {Output
-        
           ? Output.map((line, i) => <Text key={i}>{line}</Text>)
           : 'Click "Run Code" to see the output here'}
-          <div> 
+        <div>
           {Output && (areOutputsEqual ? "Correct Answer" : "Incorrect Answer")}
-
-          </div>
-          
+        </div>
       </Box>
     </Box>
   );
