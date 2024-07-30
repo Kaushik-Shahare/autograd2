@@ -26,7 +26,7 @@ const getGradeById = async (req, res) => {
   }
 };
 
-const createGrade = async (req, res) => {
+const createOrUpdateGrade = async (req, res) => {
   const { questionId, grade } = req.body;
   const studentId = req.userId;
 
@@ -35,15 +35,16 @@ const createGrade = async (req, res) => {
   }
 
   try {
-    const question = await Question.findById({ _id: questionId });
+    const question = await Question.findById({ _id: questionId }).populate(
+      "grades"
+    );
     if (!question) {
       return res.status(404).json({ message: "Question not found" });
     }
 
-    const existingGrade = await Grade.findOne({
-      studentId: studentId,
-      questionId,
-    });
+    const existingGrade = question.grades.find(
+      (g) => g.studentId.toString() === studentId
+    );
     if (existingGrade) {
       existingGrade.grade = grade;
       await existingGrade.save();
@@ -135,7 +136,7 @@ const createGradeForAllUsers = async (req, res) => {
 module.exports = {
   getAllGrades,
   getGradeById,
-  createGrade,
+  createOrUpdateGrade,
   updateGrade,
   deleteGrade,
   createGradeForAllUsers,
