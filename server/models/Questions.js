@@ -7,11 +7,11 @@ const QuesSchema = new mongoose.Schema(
       required: true,
     },
     output: {
-      type: String,
+      type: [String],
       required: true,
     },
     stdin: {
-      type: String,
+      type: [String],
     },
     cardid: {
       type: String,

@@ -24,6 +24,7 @@ const Output = ({ editorRef, language /*, output: propOutput, stdin*/ }) => {
       setOutput(result.output.split("\n"));
       VerifyOutput = result.output.split("\n");
       console.log("VerifyOutput", VerifyOutput);
+      console.log("output", JSON.stringify(output));
       result.stderr ? setIsError(true) : setIsError(false);
     } catch (error) {
       console.log(error);
@@ -36,8 +37,10 @@ const Output = ({ editorRef, language /*, output: propOutput, stdin*/ }) => {
     } finally {
       setIsLoading(false);
     }
+    VerifyOutput = VerifyOutput.map(line => line.trimEnd());
     if (JSON.stringify(VerifyOutput) === JSON.stringify(output)) {
       setAreOutputsEqual(true);
+      setGrade(100);
     } else {
       setAreOutputsEqual(false);
     }

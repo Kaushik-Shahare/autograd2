@@ -5,6 +5,7 @@ import Signin from "./routes/Signin";
 import Signup from "./routes/Signup";
 import Home from "./routes/home";
 import Card1 from "./routes/card1";
+import Grade from "./routes/grade";
 import Questions from "./routes/Component/Questions";
 import { QuestionProvider } from "./context/dataHandler";
 import Profile from "./routes/profile";
@@ -23,6 +24,7 @@ function App() {
             <Route path="/card1" element={<Questions />} />
             <Route path="/editor" element={<CodeEditor />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/grade" element={<Grade />} />
           </Routes>
         </BrowserRouter>
       </div>

@@ -1,11 +1,15 @@
 import React from "react";
 import { useQuestionContext } from "../../context/dataHandler";
-import { useNavigate } from "react-router-dom";
+import { graderForm } from './graderForm';
 
 const Question = ({ question, deleteQuestion }) => {
   const navigate = useNavigate();
   const { updateAndNavigate } = useQuestionContext();
+  const [showComponent, setShowComponent] = useState(false);
 
+  const toggleComponent = () => {
+    setShowComponent(!showComponent);
+  };
   const deletequestion = (event) => {
     event.stopPropagation();
     deleteQuestion(question._id);
@@ -31,7 +35,12 @@ const Question = ({ question, deleteQuestion }) => {
         <button onClick={deletequestion} className="bg-red-800 rounded w-12 ">
           D
         </button>
+        <button 
+        onClick={toggleComponent} className="bg-green-800 rounded w-12 ">
+        U
+        </button>
       </div>
+        {showComponent && <graderForm questionId={question._id} />}
     </div>
   );
 };

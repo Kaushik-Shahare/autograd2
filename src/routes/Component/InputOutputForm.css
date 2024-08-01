@@ -1,0 +1,88 @@
+/* InputOutputForm.css */
+.container {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .button-toggle {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .button-toggle:hover {
+    background-color: #0056b3;
+  }
+  
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .popup-content {
+    background-color: black;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 800px;
+  }
+  
+  .input-output-group {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+  }
+  
+  .input-field,
+  .output-field {
+    padding: 10px;
+    width: 48%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+  
+  .button-submit,
+  .close-button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+  }
+  
+  .button-submit {
+    background-color: #28a745;
+  }
+  
+  .button-submit:hover {
+    background-color: #218838;
+  }
+  
+  .close-button {
+    background-color: #dc3545;
+  }
+  
+  .close-button:hover {
+    background-color: #c82333;
+  }
+  

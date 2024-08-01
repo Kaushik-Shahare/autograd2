@@ -53,27 +53,28 @@ const createQuestion = async (req, res) => {
 
 const updateQuestion = async (req, res) => {
   const { id } = req.params;
-  const { question, output, stdin, cardid } = req.body; // Added cardid to the destructuring
+  const { question, output, stdin, cardid } = req.body;
+
   try {
-    const updatedQuestion = await Question.findByIdAndUpdate(
-      id,
-      { question, output, stdin, cardid },
-      { new: true }
-    ); // Included cardid in the update
-    if (!updatedQuestion) {
+    const existingQuestion = await Question.findById(id);
+    if (!existingQuestion) {
       return res.status(404).json({ message: "Question not found" });
     }
-    res
-      .status(200)
-      .json({
-        message: "Question successfully updated",
-        question: updatedQuestion,
-      });
+
+    existingQuestion.question = question || existingQuestion.question;
+    existingQuestion.output = output || existingQuestion.output;
+    existingQuestion.stdin = stdin || existingQuestion.stdin;
+    existingQuestion.cardid = cardid || existingQuestion.cardid;
+
+    await existingQuestion.save();
+    res.status(200).json({ message: "Question successfully updated", question: existingQuestion });
   } catch (error) {
     console.error("Update question error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+
 
 const deleteQuestion = async (req, res) => {
   const { id } = req.params;
