@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect } from "react";
+import './Grades.css'; // Import your custom CSS file
 
 function Grades() {
   const [grades, setGrades] = React.useState([]);
@@ -20,17 +21,17 @@ function Grades() {
   }, []);
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Grades</h1>
+    <div className="container mx-auto p-6 bg-gray-900 shadow-lg rounded-lg">
+      <h1 className="text-3xl font-extrabold mb-6 text-center text-white">Grades</h1>
 
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200">
+        <table className="min-w-full bg-gray-800 border border-gray-700">
           <thead>
-            <tr className="bg-gray-100">
-              <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
+            <tr className="bg-gray-700">
+              <th className="border border-gray-700 px-4 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider">
                 Question
               </th>
-              <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
+              <th className="border border-gray-700 px-4 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider">
                 Grades
               </th>
             </tr>
@@ -39,13 +40,15 @@ function Grades() {
             {grades.map((grade, index) => (
               <tr
                 key={index}
-                className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}
+                className={`${
+                  index % 2 === 0 ? "bg-gray-700" : "bg-gray-800"
+                } hover:bg-gray-600 transition duration-300`}
               >
-                <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
+                <td className="border border-gray-700 py-4 text-sm text-white align-top whitespace-nowrap">
                   {grade.question}
                 </td>
-                <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
-                  <ul className="list-disc pl-5">
+                <td className="border border-gray-700 px-4 py-4 text-sm text-white">
+                  <ul className="list-disc pl-5 text-white">
                     {grade.grades.map((g) => (
                       <li key={g._id}>{g.grade}</li>
                     ))}

@@ -1,0 +1,26 @@
+/* Grades.css */
+
+.container {
+    max-width: 80%;
+  }
+  
+  table {
+    transition: box-shadow 0.3s ease;
+  }
+  
+  table:hover {
+    box-shadow: 0 10px 15px rgba(255, 255, 255, 0.1);
+  }
+  
+  th, td {
+    text-align: left; /* Ensures text is aligned to the left */
+  }
+  
+  th {
+    /* padding-left: 50px; Adjusts padding for headers */
+  }
+  
+  td {
+    padding-left: 40px; /* Adjusts padding for data cells */
+  }
+  

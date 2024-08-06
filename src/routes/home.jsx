@@ -84,12 +84,12 @@ const Home = () => {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#!">
+                <a className="nav-link" href="grade">
                   Grades
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#!">
+                <a className="nav-link" href="/profile">
                   Account
                 </a>
               </li>

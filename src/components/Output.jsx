@@ -7,7 +7,7 @@ import axios from "axios";
 const Output = ({ editorRef, language }) => {
   const { output, stdin, questionId } = useQuestionContext();
 
-  const [areOutputsEqual, setAreOutputsEqual] = useState(false);
+  const [areOutputsEqual, setAreOutputsEqual] = useState([]);
   const toast = useToast();
   const [Outputs, setOutputs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,17 +47,29 @@ const Output = ({ editorRef, language }) => {
 
       if (!hasError) {
         const normalizedExpectedOutputs = stdin.map((_, index) => normalizeOutput([output[index]]));
+
+        console.log("allOutputs:", allOutputs);
+        console.log("normalizedExpectedOutputs:", normalizedExpectedOutputs);
+
         let passedCount = 0;
+        let outputComparisons = [];
 
         allOutputs.forEach((outputArray, index) => {
-          if (JSON.stringify(outputArray) === JSON.stringify(normalizedExpectedOutputs[index])) {
+          console.log(`Comparing outputs for stdin[${index}]:`);
+          console.log("actual output:", outputArray);
+          console.log("expected output:", normalizedExpectedOutputs[index]);
+          const isEqual = JSON.stringify(outputArray) === JSON.stringify(normalizedExpectedOutputs[index]);
+          outputComparisons.push(isEqual);
+          if (isEqual) {
             passedCount++;
           }
         });
 
         setGrade((passedCount / stdin.length) * 100);
-        setAreOutputsEqual(passedCount === stdin.length);
-        console.log("Grade", grade);
+        setAreOutputsEqual(outputComparisons);
+
+        console.log("passedCount:", passedCount);
+        console.log("outputComparisons:", outputComparisons);
       }
 
     } catch (error) {
@@ -120,7 +132,7 @@ const Output = ({ editorRef, language }) => {
                   <Text key={j}>{line}</Text>
                 ))}
                 <div>
-                  {areOutputsEqual ? "Correct Answer" : "Incorrect Answer"}
+                  {areOutputsEqual[i] ? "Correct Answer" : "Incorrect Answer"}
                 </div>
               </Box>
             ))

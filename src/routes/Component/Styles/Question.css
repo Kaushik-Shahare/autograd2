@@ -1,0 +1,36 @@
+/* Question.css */
+
+.question-card {
+    max-width: 80%;
+    margin: 1rem auto;
+  }
+  
+  .question-card h1 {
+    margin-bottom: 1rem;
+  }
+  
+  .action-buttons button {
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .action-buttons button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+  }
+  
+  .question-card {
+    padding: 1.5rem;
+    background-color: #1f2937; /* Tailwind gray-900 */
+    color: #ffffff; /* White text */
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .question-card h1 {
+    font-size: 1.25rem; /* Tailwind text-xl */
+    font-weight: 700; /* Tailwind font-bold */
+    color: #f87171; /* Tailwind red-500 */
+  }
+  

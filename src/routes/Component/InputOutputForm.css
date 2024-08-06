@@ -36,21 +36,21 @@
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 800px;
+    width: 150%;
+    max-width: 540px;
   }
   
   .input-output-group {
     display: flex;
     justify-content: space-between;
-    margin: 10px 0;
+    margin: 10px 2;
   }
   
   .input-field,
   .output-field {
     padding: 10px;
-    width: 48%;
-    border: 1px solid #ccc;
+    width: 98%;
+    border: 2px solid #ccc;
     border-radius: 5px;
   }
   
@@ -86,3 +86,6 @@
     background-color: #c82333;
   }
   
+  .form {
+   width: 150%;
+  }

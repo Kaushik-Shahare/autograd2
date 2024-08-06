@@ -10934,6 +10934,7 @@ textarea.form-control-lg {
   overflow: hidden;
   box-shadow: var(--shadow);
   transition: max-height 0.5s;
+  z-index: 100;
 }
 
 .profile-dropdown-list hr {
