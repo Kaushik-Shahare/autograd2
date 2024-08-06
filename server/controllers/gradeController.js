@@ -1,16 +1,16 @@
 const Grade = require("../models/Grade");
 const Question = require("../models/Questions");
 
-const getAllGrades = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const question = await Question.findById(id).populate("grades");
-    res.status(200).json({ question });
-  } catch (error) {
-    console.log("Get all grades error: ", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
+// const getAllGrades = async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const question = await Question.findById(id).populate("grades");
+//     res.status(200).json({ question });
+//   } catch (error) {
+//     console.log("Get all grades error: ", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
 
 const getGradeById = async (req, res) => {
   const { id } = req.params;
@@ -99,45 +99,70 @@ const deleteGrade = async (req, res) => {
   }
 };
 
-const createGradeForAllUsers = async (req, res) => {
-  const { questionId, studentIds, grade } = req.body;
-  try {
-    // Ensure all required fields are provided
-    if (
-      !questionId ||
-      !studentIds ||
-      studentIds.length === 0 ||
-      grade === undefined
-    ) {
-      return res.status(400).json({ message: "Missing required fields" });
-    }
+// const createGradeForAllUsers = async (req, res) => {
+//   const { questionId, studentIds, grade } = req.body;
+//   try {
+//     // Ensure all required fields are provided
+//     if (
+//       !questionId ||
+//       !studentIds ||
+//       studentIds.length === 0 ||
+//       grade === undefined
+//     ) {
+//       return res.status(400).json({ message: "Missing required fields" });
+//     }
 
-    // Create a grade for each studentId
-    const gradePromises = studentIds.map((studentId) => {
-      const newGrade = new Grade({
-        questionId,
-        studentId,
-        grade,
-      });
-      return newGrade.save();
+//     // Create a grade for each studentId
+//     const gradePromises = studentIds.map((studentId) => {
+//       const newGrade = new Grade({
+//         questionId,
+//         studentId,
+//         grade,
+//       });
+//       return newGrade.save();
+//     });
+
+//     // Wait for all grades to be saved
+//     await Promise.all(gradePromises);
+
+//     res
+//       .status(201)
+//       .json({ message: "Grades successfully created for all users" });
+//   } catch (error) {
+//     console.log("Create grade for all users error: ", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
+
+const getStudentGrades = async (req, res) => {
+  try {
+    const userID = req.userId;
+
+    const question = await Question.find().populate({
+      path: "grades",
+      match: { studentId: userID },
     });
 
-    // Wait for all grades to be saved
-    await Promise.all(gradePromises);
+    const questions = question
+      .filter((question) => question.grades.length > 0)
+      .map((question) => ({
+        id: question._id,
+        question: question.question,
+        grades: question.grades,
+      }));
 
-    res
-      .status(201)
-      .json({ message: "Grades successfully created for all users" });
+    res.status(200).json({ questions });
   } catch (error) {
-    console.log("Create grade for all users error: ", error);
+    console.log("Get student grades error: ", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
 module.exports = {
-  getAllGrades,
+  // getAllGrades,
   getGradeById,
   createOrUpdateGrade,
   updateGrade,
   deleteGrade,
-  createGradeForAllUsers,
+  getStudentGrades,
 };

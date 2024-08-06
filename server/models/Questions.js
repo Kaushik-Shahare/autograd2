@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 
 const QuesSchema = new mongoose.Schema(
   {
+    // Who can attempt this question
+
     question: {
       type: String,
       required: true,
