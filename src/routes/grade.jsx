@@ -1,12 +1,12 @@
 import React from 'react';
 import Navbar from './component/Navbar';
-import InputOutputForm from './Component/InputOutput';
+import GraderForm from './Component/GraderForm';
 
 const Grade = () => {
     return (
         <div>
             <Navbar />
-            <InputOutputForm />
+            <GraderForm />
         </div>
     );
 };

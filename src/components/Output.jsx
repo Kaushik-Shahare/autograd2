@@ -1,31 +1,65 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Box, Button, Text, useToast } from "@chakra-ui/react";
 import { executeCode } from "../api";
 import { useQuestionContext } from "../context/dataHandler";
 import axios from "axios";
-const Output = ({ editorRef, language /*, output: propOutput, stdin*/ }) => {
-  let VerifyOutput;
+
+const Output = ({ editorRef, language }) => {
   const { output, stdin, questionId } = useQuestionContext();
 
   const [areOutputsEqual, setAreOutputsEqual] = useState(false);
   const toast = useToast();
-  const [Output, setOutput] = useState(null);
+  const [Outputs, setOutputs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [grade, setGrade] = useState(0);
+
+  const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+  const normalizeOutput = (outputArray) => {
+    return outputArray.map(line => line.trim()).filter(line => line !== "");
+  };
+
   const runCode = async () => {
     console.log("questionId", questionId);
+    console.log("stdin", stdin);
+    console.log("output", output);
     const sourceCode = editorRef.current.getValue();
     if (!sourceCode) return;
+
     try {
       setIsLoading(true);
-      const { run: result } = await executeCode(language, sourceCode, stdin);
-      // const { run: result } = await executeCode(language, sourceCode);
-      setOutput(result.output.split("\n"));
-      VerifyOutput = result.output.split("\n");
-      console.log("VerifyOutput", VerifyOutput);
-      console.log("output", JSON.stringify(output));
-      result.stderr ? setIsError(true) : setIsError(false);
+      let allOutputs = [];
+      let hasError = false;
+
+      for (let i = 0; i < stdin.length; i++) {
+        const { run: result } = await executeCode(language, sourceCode, stdin[i]);
+        if (result.stderr) {
+          hasError = true;
+          break;
+        }
+        allOutputs.push(normalizeOutput(result.output.split("\n")));
+        await delay(1000); // Delay of 1 second between each request
+      }
+
+      setOutputs(allOutputs);
+      setIsError(hasError);
+
+      if (!hasError) {
+        const normalizedExpectedOutputs = stdin.map((_, index) => normalizeOutput([output[index]]));
+        let passedCount = 0;
+
+        allOutputs.forEach((outputArray, index) => {
+          if (JSON.stringify(outputArray) === JSON.stringify(normalizedExpectedOutputs[index])) {
+            passedCount++;
+          }
+        });
+
+        setGrade((passedCount / stdin.length) * 100);
+        setAreOutputsEqual(passedCount === stdin.length);
+        console.log("Grade", grade);
+      }
+
     } catch (error) {
       console.log(error);
       toast({
@@ -37,13 +71,7 @@ const Output = ({ editorRef, language /*, output: propOutput, stdin*/ }) => {
     } finally {
       setIsLoading(false);
     }
-    VerifyOutput = VerifyOutput.map(line => line.trimEnd());
-    if (JSON.stringify(VerifyOutput) === JSON.stringify(output)) {
-      setAreOutputsEqual(true);
-      setGrade(100);
-    } else {
-      setAreOutputsEqual(false);
-    }
+
     axios
       .post(
         "http://localhost:3001/api/grades/create",
@@ -85,14 +113,24 @@ const Output = ({ editorRef, language /*, output: propOutput, stdin*/ }) => {
         borderRadius={4}
         borderColor={isError ? "red.500" : "#333"}
       >
-        {Output
-          ? Output.map((line, i) => <Text key={i}>{line}</Text>)
+        {Outputs.length > 0
+          ? Outputs.map((outputArray, i) => (
+              <Box key={i}>
+                {outputArray.map((line, j) => (
+                  <Text key={j}>{line}</Text>
+                ))}
+                <div>
+                  {areOutputsEqual ? "Correct Answer" : "Incorrect Answer"}
+                </div>
+              </Box>
+            ))
           : 'Click "Run Code" to see the output here'}
         <div>
-          {Output && (areOutputsEqual ? "Correct Answer" : "Incorrect Answer")}
+          {`Grade: ${grade}%`}
         </div>
       </Box>
     </Box>
   );
 };
+
 export default Output;

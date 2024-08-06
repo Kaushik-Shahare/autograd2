@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './InputOutputForm.css';
 
-function graderForm({ questionId }) {
-  const [isVisible, setIsVisible] = useState(false);
+function GraderForm({ questionId }) {
+  const [isVisible, setIsVisible] = useState(true);
   const [inputs, setInputs] = useState(Array(5).fill(''));
   const [outputs, setOutputs] = useState(Array(5).fill(''));
   const [change, setChange] = useState(false);
@@ -40,9 +40,9 @@ function graderForm({ questionId }) {
 
   return (
     <div className="container">
-      <button className="button-toggle" onClick={toggleFormVisibility}>
+      {/* <button className="button-toggle" onClick={toggleFormVisibility}>
         {isVisible ? 'Hide Form' : 'Show Form'}
-      </button>
+      </button> */}
       {isVisible && (
         <div className="popup-overlay">
           <div className="popup-content">
@@ -85,4 +85,4 @@ function graderForm({ questionId }) {
   );
 }
 
-export default graderForm;
+export default GraderForm;

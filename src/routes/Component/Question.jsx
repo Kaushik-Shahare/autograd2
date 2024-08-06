@@ -1,6 +1,8 @@
 import React from "react";
 import { useQuestionContext } from "../../context/dataHandler";
-import { graderForm } from './graderForm';
+import  GraderForm  from './GraderForm';
+import  {useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Question = ({ question, deleteQuestion }) => {
   const navigate = useNavigate();
@@ -40,7 +42,7 @@ const Question = ({ question, deleteQuestion }) => {
         U
         </button>
       </div>
-        {showComponent && <graderForm questionId={question._id} />}
+        {showComponent && <GraderForm questionId={question._id} />}
     </div>
   );
 };
